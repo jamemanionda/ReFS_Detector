@@ -23,6 +23,10 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 4. Starting Analysis.
 5. If Detecting particular data wiping tools, It notify the name of tools.
 
+## ETC
+
+### Sample
+You can use sample $Logfile in '/Logfile Sample'.
 
 ### FAQ
 
