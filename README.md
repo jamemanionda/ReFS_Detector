@@ -2,7 +2,7 @@
 
 *Data wiping tools Detector*
 
-The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping tools behavior in log from Windows.
+The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping tools behavior in $Logfile from Windows.
 
 ## Features
 
@@ -17,7 +17,7 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 
 <img src = "https://user-images.githubusercontent.com/50189201/217536651-adf1c8ef-c362-4fd5-a9ab-4d7cbc4b242f.jpg" width="50%" height="50%">
 
-1. Get the $Logfile from ReFS.(If you experiment detecting wiping tools, you should delete files with data wiping tools in ReFS, first)
+1. Get the $Logfile from ReFS.(If you experiment detecting wiping tools, you should delete files with data wiping tools in ReFS first)
 2. Use 'File pattern.py' for detecting file deletion and 'Directory pattern.py' for detecting directory deletion.
 3. Open the detector and upload $Logfile.
 4. Starting Analysis.
@@ -30,4 +30,7 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 
   A: Please send me an email(jamemanionda@g.skku.edu). Please ensure that you respond to my inquiries as there's no other way I can fix bugs.
 
+
+-----------
+This is a tool developed for research purposes.
 
