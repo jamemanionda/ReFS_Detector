@@ -28,6 +28,6 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 
 * Q: How do I report a bug?
 
-  A: Please send me an email(jamemaniond@g.skku.edu). Please ensure that you respond to my inquiries as there's no other way I can fix bugs.
+  A: Please send me an email(jamemanionda@g.skku.edu). Please ensure that you respond to my inquiries as there's no other way I can fix bugs.
 
 
