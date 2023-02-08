@@ -17,6 +17,8 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 
 This is gonna be a very basic guide for now.
 
+![refs_sample_img](https://user-images.githubusercontent.com/50189201/217536171-6f539b2c-bf3d-4e4f-a97c-2b1bc4c281a7.jpg)
+
 
 1. Get the $Logfile from ReFS.(If you experiment detecting wiping tools, you should delete files with data wiping tools in ReFS, first)
 2. Use 'File pattern.py' for detecting file deletion and 'Directory pattern.py' for detecting directory deletion.
