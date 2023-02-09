@@ -16,7 +16,6 @@ from PySide6.QtGui import QAction, QIcon
 from qt_material import apply_stylesheet
 #from work.view.tool import Tool
 
-#pyside6-uic.exe C:\Users\SKKU-EJ\PycharmProjects\ReFS\initial.ui -o initial.py
 #form_class = uic.loadUiType("initial.ui")[0]
 
 class DetectTool(QDialog, Ui_Dialog):
@@ -90,7 +89,7 @@ class DetectTool(QDialog, Ui_Dialog):
 
     def openButtonClicked(self):
 
-        fname = QFileDialog.getOpenFileName(self, 'Open File',dir='C:\\Users\\PycharmProjects\\ReFS')
+        fname = QFileDialog.getOpenFileName(self, 'Open File',dir='C:')
         self.filepath = str(fname[0])
         fileobject = self.filepath.split('/')
         file = fileobject[len(fileobject) - 1]
