@@ -1,4 +1,4 @@
-# ReFS-DDWPᵇᵉᵗᵃ
+# ᵇᵉᵗᵃ
 
 *Data wiping tools Detector*
 
