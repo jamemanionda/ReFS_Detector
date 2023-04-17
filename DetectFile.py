@@ -68,6 +68,7 @@ class DetectTool(QDialog, Ui_Dialog):
             self.detecting()
 
         except Exception as e:
+            print(e)
             self.show_popup_ok(title="Warning", content="Selete File")
 
 
@@ -114,9 +115,6 @@ class DetectTool(QDialog, Ui_Dialog):
         if buf[i:i + 4] == b'MLog':
             try:
                 while (i >= 0):
-                    '''if buf[i] == '\x00':
-                        print('EndOfFile')
-                        sys.exit()'''
 
                     if buf[i:i + 4] == b'MLog':
                         filename = ''
@@ -142,8 +140,6 @@ class DetectTool(QDialog, Ui_Dialog):
                                         starti = i + 4096
                                         if starti > 0:
                                             sector = int(int(starti + 201330688) / 512)
-                                        print("###############################")
-                                        print("new sector : ", sector)
                                         i = starti
                                         break
                                 else:
@@ -164,8 +160,9 @@ class DetectTool(QDialog, Ui_Dialog):
 
                                 virtualAllocator = buf[startrei + 24: startrei + 26]
                                 LSNCheckpoint = buf[startrei + 32: startrei + 34]
+                                hex_value = (virtualAllocator + LSNCheckpoint).hex()
+                                cnt = int(hex_value.replace('-', ''), 16)
 
-                                cnt = (virtualAllocator + LSNCheckpoint).hex('-')
 
                                 valoff = buf[startrei + valoffpos:startrei + valoffpos + 4]
                                 bytevalsize = buf[startrei + valoffpos + 4:startrei + valoffpos + 8]
@@ -186,7 +183,7 @@ class DetectTool(QDialog, Ui_Dialog):
                                     ah = keycontent.hex()
 
                                     # 파일명시그니처
-                                    fileexp = '30010000800100000000000030000100'
+                                    fileexp = '30010000800100000000000030000100' or '30010000C00100000000000030000100'
 
                                     if fileexp in ah:
                                         filename = keycontent[16::2].decode('utf-8', 'ignore')
@@ -218,11 +215,7 @@ class DetectTool(QDialog, Ui_Dialog):
                                     if fileexp in ah:
                                         filename = valcontent[16::2].decode('ascii', 'ignore') + ' [in Val]'
                                         print(filename)
-                                        # print(filename.strip('00'))
-                                        '''detected = chardet.detect(keycontent)
-                                        decoded = keycontent.decode(detected["encoding"])
-                                        print(decoded)'''
-                                        # self.cnt = filename
+
                                     # try:
                                     datemakeint = int.from_bytes(valcontent[8:16], "little")
                                     if (datemakeint > 126120837550830000) and datemakeint < 157677573550830000:
@@ -232,8 +225,7 @@ class DetectTool(QDialog, Ui_Dialog):
                                         us = int(filedate, 16) / 10
                                         datetime1 = datetime(1601, 1, 1) + timedelta(microseconds=us)
                                         print('datetime', datetime1)
-                                    '''except Exception as e:
-                                        print(e)'''
+
 
                                 # arrop.append(hex(opcode[0]))
                                 opInt = hex(jm[0])
@@ -252,14 +244,13 @@ class DetectTool(QDialog, Ui_Dialog):
                                 finishi = startrei + size
                                 startrei = finishi
 
-
                     else:
                         raise ValueError
 
 
 
             except Exception as e:
-                print('')
+                print(e)
 
             # a=(','.join(diccnt.items()))
             # print('a', a)
@@ -267,14 +258,45 @@ class DetectTool(QDialog, Ui_Dialog):
             PatEasy = re.compile('(251444?){5}f2f2')
             PatKernel = re.compile('44?251444?f2f24')
             PatTurbo = re.compile('44?251444?44?44?f2f24')
-            PatxShredder = re.compile('644444?251444+744?f2f24')
+            Patx = re.compile('644444?251444+744?f2f24')
             PatHardwipe = re.compile(r'64484+7444?(251444?){3}f2f24')
+            PatFile = re.compile('44425144f2f24')
+            PatPC = re.compile('25144f2f24')
+            PatRemo = re.compile('425144f2f24')
+            PatSecure = re.compile('4(251444?){9}f2f24')
+            PatSuperFile = re.compile('4(64484+){3}447444?(251444?){3}f2f24')
+            PatWipeFile = re.compile('44251444?444f2f24')
+            PatXTFile = re.compile('44425144?f2f24')
 
-            patt = [PatEasy, PatKernel, PatTurbo, PatxShredder, PatHardwipe]
+            patt = [PatEasy, PatKernel, PatTurbo, Patx, PatHardwipe, PatFile, PatPC, PatRemo, PatSecure, PatSuperFile,
+                    PatWipeFile, PatXTFile]
 
+
+            #If Timevalue is different, Compare Name
+            min_difference = float('inf')
+            min_key = None
+            keys_to_delete = []
+            for key1 in sorted(diccnt.keys()):
+                min_difference = float('inf')
+                min_key = None
+
+                for key in sorted(diccnt.keys()):
+                    if key > key1:
+                        difference = abs(key - key1)
+                        if difference < min_difference:
+                            min_difference = difference
+                            min_key = key
+
+                if min_key is not None:
+                    if len(diccnt[key1]) >= 2 and len(diccnt[min_key]) >= 4:
+                        if diccnt[key1][1::3][-1] == diccnt[min_key][1::3][1]:
+                            diccnt[key1].extend(diccnt[min_key])
+                            keys_to_delete.append(min_key)
+
+            for key in keys_to_delete:
+                del diccnt[key]
             for k, v in diccnt.items():
-                # print(v)
-                #         패턴,    파일명,    시간
+                #         pattern,    Filename,   Time
                 print(k, v[0::3], v[1::3], v[2::3], end='\n')
                 self.k = k
                 self.v = v
@@ -287,29 +309,26 @@ class DetectTool(QDialog, Ui_Dialog):
                 a = (''.join(self.voppattern))
                 print(a)
                 detectName = 'none detect'
-                if re.match(PatxShredder, a):
-                    print('*****xShredder감지\n')
+                if re.match(Patx, a):
                     detectName = 'xShredder'
                 if re.match(PatHardwipe, a):
-                    print('*****Hardwipe감지\n')
                     detectName = 'Hardwipe'
                 if re.match(PatTurbo, a):
-                    print('*****Turbo감지\n')
-                    detectName = 'Turbo'
+                    detectName = 'TurboShredder'
                 if re.match(PatKernel, a):
-                    print('*****Kernel감지\n')
-                    detectName = 'Kernel'
+                    detectName = 'KernelShredder'
                 if re.match(PatEasy, a):
-                    print('*****EasyFile감지\n')
-                    detectName = 'EasyFile'
+                    detectName = 'EasyFileShredder'
+                if re.match(PatRemo, a):
+                    detectName = 'RemoFileShredder'
+                if re.match(PatSecure, a):
+                    detectName = 'Secure Eraser'
+                if re.match(PatSuperFile, a):
+                    detectName = 'Super File Shredder'
+                if re.match(PatWipeFile, a):
+                    detectName = 'Wipe File'
 
-                # thisfilename = diccnt[][]
 
-                # self.tableWidget1 = QTableWidget(self)
-                # self.tableWidget.setColumnCount(5)
-                # self.tableWidget.setRowCount(5)
-
-                ##################
                 strtime = ''
 
                 try:
@@ -321,9 +340,7 @@ class DetectTool(QDialog, Ui_Dialog):
 
                     else:
 
-                        # self.tableWidget1.insertColumn(0)
-                        # self.mmm.setItem(0, 0, QTableWidgetItem(detectName))
-                        # self.tableWidget.setHorizontalHeaderLabels([ "Detect Tool Name", "Filename"])
+
                         settingname = '****'
                         print('filename : ', self.vfilename, 'vdatetime: ', self.vdatetime)
 
@@ -338,17 +355,14 @@ class DetectTool(QDialog, Ui_Dialog):
 
                     for ii in range(len(self.vfilename)):
                         if self.vfilename[ii] != '':
-                            strname = self.vfilename[ii]
+                            strname1 = self.vfilename[ii]
+
                             break
                         else:
-                            strname = 'no name'
+                            strname1 = 'no name'
 
-                    '''for ii in range(3):
-                        if self.vfilename[ii] != '' :
-                            strname = self.vfilename[ii]
-                        else : strname = 'no name'''
 
-                    self.tableWidget.setItem(self.DetectCount, 1, QTableWidgetItem(strname))
+                    self.tableWidget.setItem(self.DetectCount, 1, QTableWidgetItem(strname1))
 
                     self.tableWidget.setItem(self.DetectCount, 3, QTableWidgetItem(self.voppattern))
 
@@ -368,11 +382,7 @@ class DetectTool(QDialog, Ui_Dialog):
             if self.DetectCount > 0:
                 self.detectOn()
         else :
-            self.show_popup_ok('경고', '로그파일이 아닙니다')
-
-
-
-
+            self.show_popup_ok('WARNING!', 'It is not Logfile')
 
 
 
