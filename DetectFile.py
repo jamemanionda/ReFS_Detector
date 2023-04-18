@@ -14,6 +14,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QWidget, QMessageBox, QApplication, QTableWidget, QTableWidgetItem, QDialog, QFileDialog
 from PySide6.QtGui import QAction, QIcon
 from qt_material import apply_stylesheet
+import json
 #from work.view.tool import Tool
 
 #form_class = uic.loadUiType("initial.ui")[0]
@@ -254,19 +255,24 @@ class DetectTool(QDialog, Ui_Dialog):
 
             # a=(','.join(diccnt.items()))
             # print('a', a)
-
             PatEasy = re.compile('(251444?){5}f2f2')
             PatKernel = re.compile('44?251444?f2f24')
             PatTurbo = re.compile('44?251444?44?44?f2f24')
             Patx = re.compile('644444?251444+744?f2f24')
             PatHardwipe = re.compile(r'64484+7444?(251444?){3}f2f24')
-            PatFile = re.compile('44425144f2f24')
+            PatFile = re.compile('44425144?f2f24')
             PatPC = re.compile('25144f2f24')
             PatRemo = re.compile('425144f2f24')
             PatSecure = re.compile('4(251444?){9}f2f24')
             PatSuperFile = re.compile('4(64484+){3}447444?(251444?){3}f2f24')
             PatWipeFile = re.compile('44251444?444f2f24')
             PatXTFile = re.compile('44425144?f2f24')
+
+            with open('data.json', 'r') as f:
+                data = json.load(f)
+            print(data)
+
+
 
             patt = [PatEasy, PatKernel, PatTurbo, Patx, PatHardwipe, PatFile, PatPC, PatRemo, PatSecure, PatSuperFile,
                     PatWipeFile, PatXTFile]
@@ -309,8 +315,8 @@ class DetectTool(QDialog, Ui_Dialog):
                 a = (''.join(self.voppattern))
                 print(a)
                 detectName = 'none detect'
-                if re.match(Patx, a):
-                    detectName = 'xShredder'
+                if re.match(Patx, a) or re.match(PatXTFile, a):
+                    detectName = 'multi'
                 if re.match(PatHardwipe, a):
                     detectName = 'Hardwipe'
                 if re.match(PatTurbo, a):
@@ -346,7 +352,7 @@ class DetectTool(QDialog, Ui_Dialog):
 
                     self.DetectCount += 1
                     self.tableWidget.insertRow(self.DetectCount)
-                    self.tableWidget.setItem(self.DetectCount, 0, QTableWidgetItem(settingname))
+
                     self.voppattern = str(self.voppattern)
                     self.voppattern = self.voppattern.replace("'", "")
                     self.voppattern = self.voppattern.replace(",", " -")
@@ -361,7 +367,24 @@ class DetectTool(QDialog, Ui_Dialog):
                         else:
                             strname1 = 'no name'
 
+                    for ii in range(len(self.vfilename)):
+                        if self.vfilename[ii] != '' and self.vfilename[ii] != strname1:
+                            strname2 = self.vfilename[ii]
 
+                            break
+                        else:
+                            strname2 = 'no name'
+
+                    if detectName == 'multi':
+                        renamepattern = strname2
+
+                        if re.match(r"^([a-z])\1+\.([A-Za-z])\1+" , renamepattern):
+                            settingname = "xShredder"
+                        elif re.match(r"[A-Za-z]+\.[A-Za-z]{3}$", renamepattern):
+                            settingname = "XTFile"
+
+
+                    self.tableWidget.setItem(self.DetectCount, 0, QTableWidgetItem(settingname))
                     self.tableWidget.setItem(self.DetectCount, 1, QTableWidgetItem(strname1))
 
                     self.tableWidget.setItem(self.DetectCount, 3, QTableWidgetItem(self.voppattern))
