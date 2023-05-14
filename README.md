@@ -12,6 +12,8 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 * Notify the tool name when detect particular data wiping tools.
 * Analysis for Directories and Files.
 
+## Structure
+<img src = "https://user-images.githubusercontent.com/50189201/217536651-adf1c8ef-c362-4fd5-a9ab-4d7cbc4b242f.jpg" width="50%" height="50%">
 
 ## Usage
 
