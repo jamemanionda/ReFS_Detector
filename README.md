@@ -1,3 +1,4 @@
+
 # ᵇᵉᵗᵃ
 
 *Data wiping tools Detector*
@@ -13,7 +14,7 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 * Analysis for Directories and Files.
 
 ## Structure
-<img src = "https://user-images.githubusercontent.com/50189201/217536651-adf1c8ef-c362-4fd5-a9ab-4d7cbc4b242f.jpg" width="50%" height="50%">
+<img src = "https://github.com/jamemanionda/ReFS_Detector/assets/50189201/95bb82fc-8719-432d-8984-49fce19fdba9" width="70%" height="70%">
 
 ## Usage
 
