@@ -7,6 +7,7 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 
 ## Features
 
+* ReFS 3.7
 * Supports 12 Data Wiping tools Detection : EasyFileShredder, FileShredder, HardWipe, KernelFileShredder, PCShredder, RemoFileEraser, SecureEraser, SuperFileShredder, TurboShredder, WipeFile, xShredder, XTFileShredder
 * Can extract opcode and metadata.
 * Notify whether the tool was used.
