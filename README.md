@@ -7,7 +7,8 @@ The Detector is ReFS $Logfile analysis tool. It allows for detecting data wiping
 
 ## Features
 
-* ReFS 3.7
+* Working in ReFS version 3.7
+* Developing with Python
 * Supports 12 Data Wiping tools Detection : EasyFileShredder, FileShredder, HardWipe, KernelFileShredder, PCShredder, RemoFileEraser, SecureEraser, SuperFileShredder, TurboShredder, WipeFile, xShredder, XTFileShredder
 * Can extract opcode and metadata.
 * Notify whether the tool was used.
@@ -36,7 +37,7 @@ You can use sample $Logfile in '/Logfile Sample'.
 
 * Q: How do I report a bug?
 
-  A: Please send me an email. Please ensure that you respond to my inquiries as there's no other way I can fix bugs.
+  A: Please send me an email(jamemanionda@naver.com). Please ensure that you respond to my inquiries as there's no other way I can fix bugs.
 
 
 -----------
