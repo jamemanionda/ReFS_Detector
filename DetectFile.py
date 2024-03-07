@@ -27,11 +27,7 @@ class DetectTool(QDialog, Ui_Dialog):
         #self.tool = Tool
         #self.addToolBar(self.tool)
 
-        #self.ui = uic.loadUi("initial.ui", self)
-        #self.ui.show()
-        #self.app = QtWidgets.QApplication(sys.argv)
-        #self.window = QWidget.QMainWindow()
-        self.main = QUiLoader().load('initial.ui', self)
+        #self.main = QUiLoader().load('initial.ui', self)
         self.setupUi(self)
         apply_stylesheet(self, 'light_red.xml')
 
